@@ -23,7 +23,7 @@ object Cryptographer {
         }.joinToString("")
     }
 
-    fun decryptCaesar(source: String, shift: Int) = encryptCaesar(source, -shift)
+    fun decryptCaesar(source: String, shift: Int): String = encryptCaesar(source, -shift)
 
     fun encryptVigenere(source: String, key: String): String {
         var keyIterator = key.iterator()
