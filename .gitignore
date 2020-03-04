@@ -63,7 +63,7 @@
 **/.gradle
 **/gradle-app.setting
 
-## OS-specific
+## Linux
 
 *~
 **/.fuse_hidden*

@@ -6,13 +6,13 @@ import com.xenomachina.argparser.default
 
 class CommandLineArgs(parser: ArgParser) {
     val action by parser.mapping(
-        "--encrypt" to Cryptographer.ENCRYPT,
-        "--decrypt" to Cryptographer.DECRYPT,
+        "--$ENCRYPT" to ENCRYPT,
+        "--$DECRYPT" to DECRYPT,
         help = "name of action to do"
     )
     val cipher by parser.mapping(
-        "--caesar" to Cryptographer.CAESAR,
-        "--vigenere" to Cryptographer.VIGENERE,
+        "--$CAESAR" to CAESAR,
+        "--$VIGENERE" to VIGENERE,
         help = "name of cipher to use"
     )
     val input by parser.storing(
@@ -33,8 +33,8 @@ class CommandLineArgs(parser: ArgParser) {
         { toInt() }
         .default<Int?>(null)
         .addValidator {
-            if (cipher == Cryptographer.CAESAR && value == null) {
-                throw SystemExitException("Invalid CLI args were passed. Run app with '--help' flag.", 1)
+            if (cipher == CAESAR && value == null) {
+                throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
             }
         }
     val key by parser.storing(
@@ -49,12 +49,12 @@ class CommandLineArgs(parser: ArgParser) {
         .default<String?>(null)
         .addValidator {
             if (
-                cipher == Cryptographer.VIGENERE &&
+                cipher == VIGENERE &&
                 (value == null || value!!.isEmpty() || value!!.any {
-                    !(Cryptographer.A_CODE..Cryptographer.Z_CODE).contains(it.toInt())
+                    !(A_CODE_Z_CODE_RANGE).contains(it.toInt())
                 })
             ) {
-                throw SystemExitException("Invalid CLI args were passed. Run app with '--help' flag.", 1)
+                throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
             }
         }
 }
