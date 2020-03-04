@@ -6,7 +6,11 @@ import org.slf4j.LoggerFactory
 import java.io.File
 
 fun invalidCliArgs() {
-    throw IllegalArgumentException("Invalid CLI args were passed. Run app with '--help' flag.");
+    error("Invalid CLI args were passed. Run app with '--help' flag.")
+}
+
+fun invalidSource() {
+    error("Invalid source was passed. Run app with '--help' flag.")
 }
 
 fun main(args: Array<String>) = mainBody {
@@ -17,12 +21,8 @@ fun main(args: Array<String>) = mainBody {
                 .readText()
                 .replace(Regex("\\s"), "")
                 .toUpperCase()
-            if (
-                source.isEmpty() ||
-                source.any { !(Cryptographer.A_CODE..Cryptographer.Z_CODE).contains(it.toInt()) }
-            ) {
-                logger.info(source)
-                invalidCliArgs()
+            if (source.any { !(Cryptographer.A_CODE..Cryptographer.Z_CODE).contains(it.toInt()) }) {
+                invalidSource()
             }
             val result = when (cipher) {
                 Cryptographer.CAESAR -> shift?.let {
