@@ -16,21 +16,14 @@ object Cryptographer {
             var newCode = it.toInt() + realShift
             if (newCode > Z_CODE) {
                 newCode -= ALPHABET_SIZE + 1
-            }
-            newCode.toChar()
-        }.joinToString("")
-    }
-
-    fun decryptCaesar(source: String, shift: Int): String {
-        val realShift = shift % (ALPHABET_SIZE + 1)
-        return source.map {
-            var newCode = it.toInt() - realShift
-            if (newCode < A_CODE) {
+            } else if (newCode < A_CODE) {
                 newCode += ALPHABET_SIZE + 1
             }
             newCode.toChar()
         }.joinToString("")
     }
+
+    fun decryptCaesar(source: String, shift: Int) = encryptCaesar(source, -shift)
 
     fun encryptVigenere(source: String, key: String): String {
         var keyIterator = key.iterator()
