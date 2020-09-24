@@ -13,13 +13,13 @@ class CommandLineArgs(parser: ArgParser) {
     val cipher by parser.mapping(
         "--$CAESAR" to CAESAR,
         "--$VIGENERE" to VIGENERE,
+        "--$AFFINE" to AFFINE,
         help = "name of cipher to use"
     )
     val input by parser.storing(
         "--in",
         "--input",
-        help = "input file path (text to encrypt/decrypt must consist " +
-                "only of English letters, any whitespaces will be removed)"
+        help = "input file path"
     )
     val output by parser.storing(
         "--out",
@@ -39,21 +39,26 @@ class CommandLineArgs(parser: ArgParser) {
         }
     val key by parser.storing(
             "--key",
-            help = "key required for Vigenere cipher (must consist only of English " +
-                    "letters, any whitespaces will be removed)"
+            help = "key required for Vigenere cipher"
         )
-        {
-            toUpperCase()
-            replace(Regex("\\s"), "")
-        }
+        { toUpperCase() }
         .default<String?>(null)
         .addValidator {
             if (
                 cipher == VIGENERE &&
-                (value == null || value!!.isEmpty() || value!!.any {
-                    !(A_CODE_Z_CODE_RANGE).contains(it.toInt())
-                })
+                (value == null || value!!.isEmpty())
             ) {
+                throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+            }
+        }
+    val b by parser.storing(
+            "--b",
+            help = "b required for Affine cipher"
+        )
+        { toInt() }
+        .default<Int?>(null)
+        .addValidator {
+            if (cipher == AFFINE && value == null) {
                 throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
             }
         }

@@ -15,11 +15,7 @@ fun main(args: Array<String>) = mainBody {
         try {
             val source = File(input)
                 .readText()
-                .replace(Regex("\\s"), "")
                 .toUpperCase()
-            if (source.any { !(A_CODE_Z_CODE_RANGE).contains(it.toInt()) }) {
-                error("Invalid source was passed. Run app with '--help' flag.")
-            }
             val result = when (cipher) {
                 CAESAR -> shift?.let {
                     when (action) {
@@ -32,6 +28,13 @@ fun main(args: Array<String>) = mainBody {
                     when (action) {
                         ENCRYPT -> Cryptographer.encryptVigenere(source, it)
                         DECRYPT -> Cryptographer.decryptVigenere(source, it)
+                        else -> invalidCliArgs()
+                    }
+                }
+                AFFINE -> b?.let {
+                    when (action) {
+                        ENCRYPT -> Cryptographer.encryptAffine(source, it)
+                        DECRYPT -> Cryptographer.decryptAffine(source, it)
                         else -> invalidCliArgs()
                     }
                 }
