@@ -79,4 +79,8 @@ object Cryptographer {
             }
         }.joinToString("")
     }
+
+    fun cryptanalysisVigenere(source: String, keyLength: Int) {
+        val sourceParts = source.chunked(keyLength)
+    }
 }

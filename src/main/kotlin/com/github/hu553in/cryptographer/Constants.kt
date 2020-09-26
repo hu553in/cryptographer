@@ -6,6 +6,7 @@ const val AFFINE = "affine"
 
 const val ENCRYPT = "encrypt"
 const val DECRYPT = "decrypt"
+const val CRYPTANALYSIS = "cryptanalysis"
 
 const val A_CODE = 'A'.toInt()
 const val Z_CODE = 'Z'.toInt()

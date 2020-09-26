@@ -8,6 +8,7 @@ class CommandLineArgs(parser: ArgParser) {
     val action by parser.mapping(
         "--$ENCRYPT" to ENCRYPT,
         "--$DECRYPT" to DECRYPT,
+        "--$CRYPTANALYSIS" to CRYPTANALYSIS,
         help = "name of action to do"
     )
     val cipher by parser.mapping(
@@ -27,10 +28,10 @@ class CommandLineArgs(parser: ArgParser) {
         help = "output file path"
     )
     val shift by parser.storing(
-            "--shift",
-            help = "shift required for Caesar cipher"
-        )
-        { toInt() }
+        "--shift",
+        help = "shift required for Caesar cipher"
+    )
+    { toInt() }
         .default<Int?>(null)
         .addValidator {
             if (cipher == CAESAR && value == null) {
@@ -38,24 +39,36 @@ class CommandLineArgs(parser: ArgParser) {
             }
         }
     val key by parser.storing(
-            "--key",
-            help = "key required for Vigenere cipher"
-        )
-        { toUpperCase() }
+        "--key",
+        help = "key required for Vigenere cipher encryption/decryption"
+    )
+    { toUpperCase() }
         .default<String?>(null)
         .addValidator {
             if (
                 cipher == VIGENERE &&
+                (action == ENCRYPT || action == DECRYPT) &&
                 (value == null || value!!.isEmpty())
             ) {
                 throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
             }
         }
+    val keyLength by parser.storing(
+        "--keyLength",
+        help = "key length required for Vigenere cipher cracking"
+    )
+    { toInt() }
+        .default<Int?>(null)
+        .addValidator {
+            if (cipher == VIGENERE && action == CRYPTANALYSIS && value == null) {
+                throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+            }
+        }
     val b by parser.storing(
-            "--b",
-            help = "b required for Affine cipher"
-        )
-        { toInt() }
+        "--b",
+        help = "b required for Affine cipher"
+    )
+    { toInt() }
         .default<Int?>(null)
         .addValidator {
             if (cipher == AFFINE && value == null) {

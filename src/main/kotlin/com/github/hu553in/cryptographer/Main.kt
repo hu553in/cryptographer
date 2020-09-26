@@ -16,25 +16,26 @@ fun main(args: Array<String>) = mainBody {
             val source = File(input)
                 .readText()
                 .toUpperCase()
-            val result = when (cipher) {
-                CAESAR -> shift?.let {
-                    when (action) {
-                        ENCRYPT -> Cryptographer.encryptCaesar(source, it)
-                        DECRYPT -> Cryptographer.decryptCaesar(source, it)
+            val result = when (action) {
+                ENCRYPT -> {
+                    when (cipher) {
+                        CAESAR -> shift?.let { Cryptographer.encryptCaesar(source, it) }
+                        VIGENERE -> key?.let { Cryptographer.encryptVigenere(source, it) }
+                        AFFINE -> b?.let { Cryptographer.encryptAffine(source, it) }
                         else -> invalidCliArgs()
                     }
                 }
-                VIGENERE -> key?.let {
-                    when (action) {
-                        ENCRYPT -> Cryptographer.encryptVigenere(source, it)
-                        DECRYPT -> Cryptographer.decryptVigenere(source, it)
+                DECRYPT -> {
+                    when (cipher) {
+                        CAESAR -> shift?.let { Cryptographer.decryptCaesar(source, it) }
+                        VIGENERE -> key?.let { Cryptographer.decryptVigenere(source, it) }
+                        AFFINE -> b?.let { Cryptographer.decryptAffine(source, it) }
                         else -> invalidCliArgs()
                     }
                 }
-                AFFINE -> b?.let {
-                    when (action) {
-                        ENCRYPT -> Cryptographer.encryptAffine(source, it)
-                        DECRYPT -> Cryptographer.decryptAffine(source, it)
+                CRYPTANALYSIS -> {
+                    when (cipher) {
+                        VIGENERE -> keyLength?.let { Cryptographer.cryptanalysisVigenere(source, it) }
                         else -> invalidCliArgs()
                     }
                 }

@@ -15,6 +15,8 @@ Their values are:
 * `a = 3` for encryption
 * `a = 9` for decryption
 
+Also, this app can try to crack Vigenere cipher using the frequency cryptanalysis.
+
 ## Tech stack
 
 * Kotlin
@@ -30,7 +32,7 @@ Their values are:
 
 #### Required
 
-* `--encrypt`, `--decrypt` - the name of an action to do
+* `--encrypt`, `--decrypt`, `--cryptanalysis` - the name of an action to do
 * `--caesar`, `--vigenere`, `--affine` - the name of the cipher to use
 * `--in IN`, `--input IN` - an input file path
 * `--out OUT`, `--output OUT` - an output file path
@@ -38,7 +40,8 @@ Their values are:
 #### Optionally required for different ciphers
 
 * `--shift SHIFT` - the shift required for Caesar cipher
-* `--key KEY` - the key required for Vigenere cipher
+* `--key KEY` - the key required for Vigenere cipher encryption/decryption
+* `--keyLength KEYLENGTH` - the key length required for Vigenere cipher cracking
 * `--b B` - `b` variable required for Affine cipher
 
 #### Optional
