@@ -5,24 +5,19 @@ import com.xenomachina.argparser.mainBody
 import org.slf4j.LoggerFactory
 import java.io.File
 
-fun invalidCliArgs() {
-    error(INVALID_CLI_ARGS_ERROR_MSG)
-}
-
 fun main(args: Array<String>) = mainBody {
     val rootLogger = LoggerFactory.getLogger("root logger")
     ArgParser(args).parseInto(::CommandLineArgs).run {
         try {
-            val source = File(input)
-                .readText()
-                .toUpperCase()
-            val result = when (action) {
+            val source = File(input).readText().toUpperCase()
+            rootLogger.info("SOURCE:\n\n$source")
+            val result: String = when (action) {
                 ENCRYPT -> {
                     when (cipher) {
                         CAESAR -> shift?.let { Cryptographer.encryptCaesar(source, it) }
                         VIGENERE -> key?.let { Cryptographer.encryptVigenere(source, it) }
                         AFFINE -> b?.let { Cryptographer.encryptAffine(source, it) }
-                        else -> invalidCliArgs()
+                        else -> error(INVALID_CLI_ARGS_ERROR_MSG)
                     }
                 }
                 DECRYPT -> {
@@ -30,18 +25,19 @@ fun main(args: Array<String>) = mainBody {
                         CAESAR -> shift?.let { Cryptographer.decryptCaesar(source, it) }
                         VIGENERE -> key?.let { Cryptographer.decryptVigenere(source, it) }
                         AFFINE -> b?.let { Cryptographer.decryptAffine(source, it) }
-                        else -> invalidCliArgs()
+                        else -> error(INVALID_CLI_ARGS_ERROR_MSG)
                     }
                 }
-                CRYPTANALYSIS -> {
+                BREAK -> {
                     when (cipher) {
-                        VIGENERE -> keyLength?.let { Cryptographer.cryptanalysisVigenere(source, it) }
-                        else -> invalidCliArgs()
+                        VIGENERE -> Cryptographer.breakVigenere(source)
+                        else -> error(INVALID_CLI_ARGS_ERROR_MSG)
                     }
                 }
-                else -> invalidCliArgs()
-            }
-            File(output).writeText(result as String)
+                else -> error(INVALID_CLI_ARGS_ERROR_MSG)
+            } ?: error("Result is null")
+            File(output).writeText(result)
+            rootLogger.info("RESULT:\n\n$result")
         } catch (e: Exception) {
             rootLogger.error("${e.javaClass.canonicalName} - ${e.message}")
         }
