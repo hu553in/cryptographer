@@ -1,5 +1,6 @@
 package com.github.hu553in.cryptographer
 
+import com.github.hu553in.cryptographer.rng.LinearCongruentRng
 import kotlin.math.abs
 
 object Cryptographer {
@@ -82,6 +83,36 @@ object Cryptographer {
         }.joinToString("")
     }
 
+    fun encryptGamma(source: String, startKey: Int): String {
+        val rng = LinearCongruentRng(startKey)
+        return source.map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+                it
+            } else {
+                val newCode = (it.toInt() - A_CODE + rng.next()) % ALPHABET_SIZE + A_CODE
+                newCode.toChar()
+            }
+        }.joinToString("")
+    }
+
+    fun decryptGamma(source: String, startKey: Int): String {
+        val rng = LinearCongruentRng(startKey)
+        return source.map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+                it
+            } else {
+                val key = rng.next()
+                val alphabetPosition = it.toInt() - A_CODE
+                val newCode = if (alphabetPosition + ALPHABET_SIZE >= key) {
+                    (alphabetPosition + ALPHABET_SIZE - key) % ALPHABET_SIZE + A_CODE
+                } else {
+                    ALPHABET_SIZE - abs(alphabetPosition - key + ALPHABET_SIZE) % ALPHABET_SIZE + A_CODE
+                }
+                newCode.toChar()
+            }
+        }.joinToString("")
+    }
+
     private fun countIndexOfCoincidenceVigenere(source: String, estimatedLength: Int): Double {
         val groupsOfNthElements = splitStringToGroupsOfNthElements(source, estimatedLength)
         val indicesOfCoincidenceForGroups = groupsOfNthElements.map { group ->
@@ -141,9 +172,9 @@ object Cryptographer {
 
     fun breakVigenere(rawSource: String): String {
         val nonEnglishAlphabetSymbols = Regex("[^A-Z]")
-                .findAll(rawSource)
-                .associate { it.range.first to it.value }
-                .toSortedMap()
+            .findAll(rawSource)
+            .associate { it.range.first to it.value }
+            .toSortedMap()
         val source = rawSource.replace(Regex("[^A-Z]"), String())
         val keyLength = findKeyLengthVigenere(source)
         val groupsOfNthElements = splitStringToGroupsOfNthElements(source, keyLength)

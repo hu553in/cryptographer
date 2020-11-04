@@ -3,6 +3,7 @@ package com.github.hu553in.cryptographer
 const val CAESAR = "caesar"
 const val VIGENERE = "vigenere"
 const val AFFINE = "affine"
+const val GAMMA = "gamma"
 
 const val ENCRYPT = "encrypt"
 const val DECRYPT = "decrypt"
@@ -26,5 +27,9 @@ val ENGLISH_ALPHABET_STANDARD_FREQUENCIES = mapOf(
 
 const val AFFINE_A = 3
 const val AFFINE_A_SWAP = 9
+
+const val LINEAR_CONGRUENT_RNG_A = 3
+const val LINEAR_CONGRUENT_RNG_B = 2
+const val LINEAR_CONGRUENT_RNG_M = 40692
 
 const val INVALID_CLI_ARGS_ERROR_MSG = "Invalid CLI args were passed. Run app with '--help' flag."

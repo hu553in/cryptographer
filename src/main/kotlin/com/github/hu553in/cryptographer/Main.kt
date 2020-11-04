@@ -17,6 +17,7 @@ fun main(args: Array<String>) = mainBody {
                         CAESAR -> shift?.let { Cryptographer.encryptCaesar(source, it) }
                         VIGENERE -> key?.let { Cryptographer.encryptVigenere(source, it) }
                         AFFINE -> b?.let { Cryptographer.encryptAffine(source, it) }
+                        GAMMA -> Cryptographer.encryptGamma(source, startKey)
                         else -> error(INVALID_CLI_ARGS_ERROR_MSG)
                     }
                 }
@@ -25,6 +26,7 @@ fun main(args: Array<String>) = mainBody {
                         CAESAR -> shift?.let { Cryptographer.decryptCaesar(source, it) }
                         VIGENERE -> key?.let { Cryptographer.decryptVigenere(source, it) }
                         AFFINE -> b?.let { Cryptographer.decryptAffine(source, it) }
+                        GAMMA -> Cryptographer.decryptGamma(source, startKey)
                         else -> error(INVALID_CLI_ARGS_ERROR_MSG)
                     }
                 }
