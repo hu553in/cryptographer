@@ -58,3 +58,9 @@ Each source character which isn't English letter will be skipped.
 
 * `--startKey START_KEY` - the start key for gamma cipher encryption/decryption (defaults to `1`)
 * `-h`, `--help` - show this help message and exit
+
+### Example
+
+```
+java -jar ./build/cryptographer.jar --encrypt --gamma --startKey 25 --in src.txt --out dest.txt
+```
