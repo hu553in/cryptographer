@@ -1,4 +1,4 @@
-package com.github.hu553in.cryptographer
+package com.github.hu553in.cryptographer.utils
 
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.SystemExitException
@@ -32,7 +32,13 @@ class CommandLineArgs(parser: ArgParser) {
         "--shift",
         help = "shift required for Caesar cipher"
     )
-    { toInt() }
+    {
+        try {
+            toInt()
+        } catch (e: Exception) {
+            throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+        }
+    }
         .default<Int?>(null)
         .addValidator {
             if (cipher == CAESAR && value == null) {
@@ -41,7 +47,7 @@ class CommandLineArgs(parser: ArgParser) {
         }
     val key by parser.storing(
         "--key",
-        help = "key required for Vigenere cipher encryption/decryption"
+        help = "key required for Vigenere cipher encryption/decryption (must consist of English letters only)"
     )
     { toUpperCase() }
         .default<String?>(null)
@@ -49,7 +55,9 @@ class CommandLineArgs(parser: ArgParser) {
             if (
                 cipher == VIGENERE &&
                 (action == ENCRYPT || action == DECRYPT) &&
-                (value == null || value!!.isEmpty())
+                (value == null || value!!.isEmpty() || value!!.any {
+                    !A_CODE_Z_CODE_RANGE.contains(it.toInt())
+                })
             ) {
                 throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
             }
@@ -58,13 +66,25 @@ class CommandLineArgs(parser: ArgParser) {
         "--startKey",
         help = "start key for gamma cipher encryption/decryption (defaults to 1)"
     )
-    { toInt() }
+    {
+        try {
+            toInt()
+        } catch (e: Exception) {
+            throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+        }
+    }
         .default<Int>(1)
     val b by parser.storing(
         "--b",
         help = "b required for Affine cipher"
     )
-    { toInt() }
+    {
+        try {
+            toInt()
+        } catch (e: Exception) {
+            throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+        }
+    }
         .default<Int?>(null)
         .addValidator {
             if (cipher == AFFINE && value == null) {

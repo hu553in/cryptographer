@@ -1,4 +1,4 @@
-package com.github.hu553in.cryptographer
+package com.github.hu553in.cryptographer.utils
 
 const val CAESAR = "caesar"
 const val VIGENERE = "vigenere"
@@ -19,10 +19,11 @@ const val ALPHABET_SIZE = Z_CODE - A_CODE + 1
 val A_CODE_Z_CODE_RANGE = A_CODE..Z_CODE
 
 val ENGLISH_ALPHABET_STANDARD_FREQUENCIES = mapOf(
-        'E' to 0.12702, 'T' to 0.09056, 'A' to 0.08167, 'O' to 0.07507, 'I' to 0.06966, 'N' to 0.06749, 'S' to 0.06327,
-        'H' to 0.06094, 'R' to 0.05987, 'D' to 0.04253, 'L' to 0.04025, 'C' to 0.02782, 'U' to 0.02758, 'M' to 0.02406,
-        'W' to 0.02360, 'F' to 0.02228, 'G' to 0.02015, 'Y' to 0.01974, 'P' to 0.01929, 'B' to 0.01492, 'V' to 0.00978,
-        'K' to 0.00772, 'J' to 0.00153, 'X' to 0.00150, 'Q' to 0.00095, 'Z' to 0.00074
+        'E' to 0.12702, 'T' to 0.09056, 'A' to 0.08167, 'O' to 0.07507, 'I' to 0.06966, 'N' to 0.06749,
+        'S' to 0.06327, 'H' to 0.06094, 'R' to 0.05987, 'D' to 0.04253, 'L' to 0.04025, 'C' to 0.02782,
+        'U' to 0.02758, 'M' to 0.02406, 'W' to 0.02360, 'F' to 0.02228, 'G' to 0.02015, 'Y' to 0.01974,
+        'P' to 0.01929, 'B' to 0.01492, 'V' to 0.00978, 'K' to 0.00772, 'J' to 0.00153, 'X' to 0.00150,
+        'Q' to 0.00095, 'Z' to 0.00074
 )
 
 const val AFFINE_A = 3

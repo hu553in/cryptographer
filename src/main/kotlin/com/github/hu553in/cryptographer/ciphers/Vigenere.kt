@@ -1,29 +1,22 @@
-package com.github.hu553in.cryptographer
+package com.github.hu553in.cryptographer.ciphers
 
-import com.github.hu553in.cryptographer.rng.LinearCongruentRng
+import com.github.hu553in.cryptographer.exceptions.NullCipherContextParamException
+import com.github.hu553in.cryptographer.roles.Breaker
+import com.github.hu553in.cryptographer.roles.Decrypter
+import com.github.hu553in.cryptographer.roles.Encryptor
+import com.github.hu553in.cryptographer.utils.ALPHABET_SIZE
+import com.github.hu553in.cryptographer.utils.A_CODE
+import com.github.hu553in.cryptographer.utils.A_CODE_Z_CODE_RANGE
+import com.github.hu553in.cryptographer.utils.CipherContext
+import com.github.hu553in.cryptographer.utils.ENGLISH_ALPHABET_STANDARD_FREQUENCIES
+import com.github.hu553in.cryptographer.utils.ENGLISH_INDEX_OF_COINCIDENCE
+import com.github.hu553in.cryptographer.utils.MAX_ESTIMATED_KEY_LENGTH
+import com.github.hu553in.cryptographer.utils.Z_CODE
 import kotlin.math.abs
 
-object Cryptographer {
-    fun encryptCaesar(source: String, shift: Int): String {
-        val realShift = shift % (ALPHABET_SIZE)
-        return source.map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
-                it
-            } else {
-                var newCode = it.toInt() + realShift
-                if (newCode > Z_CODE) {
-                    newCode -= ALPHABET_SIZE
-                } else if (newCode < A_CODE) {
-                    newCode += ALPHABET_SIZE
-                }
-                newCode.toChar()
-            }
-        }.joinToString("")
-    }
-
-    fun decryptCaesar(source: String, shift: Int) = encryptCaesar(source, -shift)
-
-    fun encryptVigenere(source: String, key: String): String {
+object Vigenere : Encryptor, Decrypter, Breaker {
+    override fun encrypt(source: String, ctx: CipherContext): String {
+        val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
         return source.map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
@@ -42,7 +35,8 @@ object Cryptographer {
         }.joinToString("")
     }
 
-    fun decryptVigenere(source: String, key: String): String {
+    override fun decrypt(source: String, ctx: CipherContext): String {
+        val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
         return source.map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
@@ -61,59 +55,7 @@ object Cryptographer {
         }.joinToString("")
     }
 
-    fun encryptAffine(source: String, b: Int): String {
-        return source.map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
-                it
-            } else {
-                val newCode = (AFFINE_A * (it.toInt() - A_CODE) + b) % ALPHABET_SIZE + A_CODE
-                newCode.toChar()
-            }
-        }.joinToString("")
-    }
-
-    fun decryptAffine(source: String, b: Int): String {
-        return source.map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
-                it
-            } else {
-                val newCode = AFFINE_A_SWAP * ((it.toInt() - A_CODE) - b) % ALPHABET_SIZE + A_CODE
-                newCode.toChar()
-            }
-        }.joinToString("")
-    }
-
-    fun encryptGamma(source: String, startKey: Int): String {
-        val rng = LinearCongruentRng(startKey)
-        return source.map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
-                it
-            } else {
-                val newCode = (it.toInt() - A_CODE + rng.next()) % ALPHABET_SIZE + A_CODE
-                newCode.toChar()
-            }
-        }.joinToString("")
-    }
-
-    fun decryptGamma(source: String, startKey: Int): String {
-        val rng = LinearCongruentRng(startKey)
-        return source.map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
-                it
-            } else {
-                val key = rng.next()
-                val alphabetPosition = it.toInt() - A_CODE
-                val newCode = if (alphabetPosition + ALPHABET_SIZE >= key) {
-                    (alphabetPosition + ALPHABET_SIZE - key) % ALPHABET_SIZE + A_CODE
-                } else {
-                    ALPHABET_SIZE - abs(alphabetPosition - key + ALPHABET_SIZE) % ALPHABET_SIZE + A_CODE
-                }
-                newCode.toChar()
-            }
-        }.joinToString("")
-    }
-
-    private fun countIndexOfCoincidenceVigenere(source: String, estimatedLength: Int): Double {
+    private fun countIndexOfCoincidence(source: String, estimatedLength: Int): Double {
         val groupsOfNthElements = splitStringToGroupsOfNthElements(source, estimatedLength)
         val indicesOfCoincidenceForGroups = groupsOfNthElements.map { group ->
             val frequencies = A_CODE_Z_CODE_RANGE.map { letterCode ->
@@ -128,11 +70,11 @@ object Cryptographer {
         return indicesOfCoincidenceForGroups.average()
     }
 
-    private fun findKeyLengthVigenere(source: String): Int {
+    private fun findKeyLength(source: String): Int {
         var keyLength = 0
         var difference = Double.MAX_VALUE
         for (newKeyLength in 2..MAX_ESTIMATED_KEY_LENGTH) {
-            val newIndexOfCoincidence = countIndexOfCoincidenceVigenere(source, newKeyLength)
+            val newIndexOfCoincidence = countIndexOfCoincidence(source, newKeyLength)
             if (newIndexOfCoincidence.isNaN()) break
             val newDifference = abs(ENGLISH_INDEX_OF_COINCIDENCE - newIndexOfCoincidence)
             if (newDifference < difference) {
@@ -150,11 +92,11 @@ object Cryptographer {
         }.map { it.joinToString("") }
     }
 
-    private fun decryptGroupOfNthElementsVigenere(group: String): String {
+    private fun decryptGroupOfNthElements(group: String): String {
         var correlation = 0.0
         var decryptedGroup = ""
         (0 until ALPHABET_SIZE).forEach { alphabetIndex ->
-            val newDecryptedGroupOfNthElements = decryptCaesar(group, alphabetIndex)
+            val newDecryptedGroupOfNthElements = Caesar.decrypt(group, CipherContext(shift = alphabetIndex))
             val frequencies = A_CODE_Z_CODE_RANGE.map { letterCode ->
                 newDecryptedGroupOfNthElements.count { it == letterCode.toChar() }.toDouble()
             }
@@ -170,16 +112,20 @@ object Cryptographer {
         return decryptedGroup
     }
 
-    fun breakVigenere(rawSource: String): String {
+    override fun `break`(
+        source: String,
+        @Suppress("UNUSED_PARAMETER")
+        ctx: CipherContext
+    ): String {
         val nonEnglishAlphabetSymbols = Regex("[^A-Z]")
-            .findAll(rawSource)
+            .findAll(source)
             .associate { it.range.first to it.value }
             .toSortedMap()
-        val source = rawSource.replace(Regex("[^A-Z]"), String())
-        val keyLength = findKeyLengthVigenere(source)
-        val groupsOfNthElements = splitStringToGroupsOfNthElements(source, keyLength)
+        val cleanedSource = source.replace(Regex("[^A-Z]"), String())
+        val keyLength = findKeyLength(cleanedSource)
+        val groupsOfNthElements = splitStringToGroupsOfNthElements(cleanedSource, keyLength)
         val decryptedGroupsOfNthElements = groupsOfNthElements.map { groupOfNthElements ->
-            decryptGroupOfNthElementsVigenere(groupOfNthElements)
+            decryptGroupOfNthElements(groupOfNthElements)
         }
         return StringBuilder().apply {
             for (biggestDecryptedGroupElementIndex in decryptedGroupsOfNthElements[0].indices) {

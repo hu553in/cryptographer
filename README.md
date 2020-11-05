@@ -51,7 +51,7 @@ Each source character which isn't English letter will be skipped.
 #### Optionally required for different ciphers
 
 * `--shift SHIFT` - the shift required for Caesar cipher encryption/decryption
-* `--key KEY` - the key required for Vigenere cipher encryption/decryption
+* `--key KEY` - the key required for Vigenere cipher encryption/decryption (must consist of English letters only)
 * `--b B` - `b` variable required for Affine cipher encryption/decryption
 
 #### Optional
