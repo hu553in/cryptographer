@@ -16,6 +16,7 @@ class CommandLineArgs(parser: ArgParser) {
         "--$VIGENERE" to VIGENERE,
         "--$AFFINE" to AFFINE,
         "--$GAMMA" to GAMMA,
+        "--$FEISTEL_NETWORK" to FEISTEL_NETWORK,
         help = "name of cipher to use"
     )
     val input by parser.storing(

@@ -18,7 +18,7 @@ object Vigenere : Encryptor, Decrypter, Breaker {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
@@ -38,7 +38,7 @@ object Vigenere : Encryptor, Decrypter, Breaker {
     override fun decrypt(source: String, ctx: CipherContext): String {
         val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
@@ -55,9 +55,8 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         }.joinToString("")
     }
 
-    private fun countIndexOfCoincidence(source: String, estimatedLength: Int): Double {
-        val groupsOfNthElements = splitStringToGroupsOfNthElements(source, estimatedLength)
-        val indicesOfCoincidenceForGroups = groupsOfNthElements.map { group ->
+    private fun countIndexOfCoincidence(source: String, estimatedLength: Int) =
+        splitStringToGroupsOfNthElements(source, estimatedLength).map { group ->
             val frequencies = A_CODE_Z_CODE_RANGE.map { letterCode ->
                 group.count { it == letterCode.toChar() }.toDouble()
             }
@@ -67,9 +66,7 @@ object Vigenere : Encryptor, Decrypter, Breaker {
                         (currentFrequency * (currentFrequency - 1)) /
                         (group.length * (group.length - 1))
             }
-        }
-        return indicesOfCoincidenceForGroups.average()
-    }
+        }.average()
 
     private fun findKeyLength(source: String): Int {
         var keyLength = 0
@@ -89,16 +86,13 @@ object Vigenere : Encryptor, Decrypter, Breaker {
     private fun splitStringToGroupsOfNthElements(
         source: String,
         groupCount: Int
-    ): List<String> {
-        val sourceChunks = source.chunked(groupCount)
-        return MutableList(groupCount) { mutableListOf<Char>() }.apply {
-            sourceChunks.forEach { chunk ->
-                chunk.forEachIndexed { index, char ->
-                    this[index].add(char)
-                }
+    ) = MutableList(groupCount) { mutableListOf<Char>() }.apply {
+        source.chunked(groupCount).forEach { chunk ->
+            chunk.forEachIndexed { index, char ->
+                this[index].add(char)
             }
-        }.map { it.joinToString("") }
-    }
+        }
+    }.map { it.joinToString("") }
 
     private fun decryptGroupOfNthElements(group: String): String {
         var correlation = 0.0
@@ -132,11 +126,12 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         @Suppress("UNUSED_PARAMETER")
         ctx: CipherContext
     ): String {
+        val upperCaseSource = source.toUpperCase()
         val nonEnglishAlphabetSymbols = Regex("[^A-Z]")
-            .findAll(source)
+            .findAll(upperCaseSource)
             .associate { it.range.first to it.value }
             .toSortedMap()
-        val cleanedSource = source.replace(Regex("[^A-Z]"), String())
+        val cleanedSource = upperCaseSource.replace(Regex("[^A-Z]"), String())
         val keyLength = findKeyLength(cleanedSource)
         val groupsOfNthElements = splitStringToGroupsOfNthElements(cleanedSource, keyLength)
         val decryptedGroupsOfNthElements = groupsOfNthElements.map { groupOfNthElements ->

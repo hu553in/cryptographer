@@ -4,6 +4,7 @@ const val CAESAR = "caesar"
 const val VIGENERE = "vigenere"
 const val AFFINE = "affine"
 const val GAMMA = "gamma"
+const val FEISTEL_NETWORK = "feistelNetwork"
 
 const val ENCRYPT = "encrypt"
 const val DECRYPT = "decrypt"
@@ -37,3 +38,6 @@ const val LINEAR_CONGRUENT_RNG_M = 40692
 
 const val INVALID_CLI_ARGS_ERROR_MSG =
     "Invalid CLI args were passed. Run app with '--help' flag."
+
+const val FEISTEL_NETWORK_BLOCK_LENGTH = 4
+val FEISTEL_NETWORK_KEYS = listOf(5, 2, 7, 6, 1, 8, 3, 9, 4, 6, 2, 3, 8, 5, 1, 4)

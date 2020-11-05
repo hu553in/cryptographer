@@ -2,11 +2,16 @@
 
 ## Description
 
-Encryption/decryption app that can process the source using following ciphers:
+This project is an encryption/decryption app that can process the source using following ciphers:
 * Caesar
 * Vigenere
 * Affine
 * Gamma
+* Feistel network
+
+**Note:** All source characters will be converted to the upper case before further processing.
+Each source character which is not English letter will be skipped.
+**These two statements are true for everything excluding Feistel network cipher.**
 
 Affine cipher's `a` variable is hardcoded in the current version of app.\
 It's value is:
@@ -19,14 +24,18 @@ Their values are:
 * `b = 2`
 * `m = 40692`
 
+Feistel network's keys, block length, round key calculation algorithm
+are hardcoded in the current version of app.\
+Their values are:
+* keys: `5`, `2`, `7`, `6`, `1`, `8`, `3`, `9`, `4`, `6`, `2`, `3`, `8`, `5`, `1`, `4`
+* block length: `4`
+* round key calculation algorithm: `key * 7 / 2`
+
 Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
 
-You should note that the probability of the successful breaking is directly proportional
+**Note:** the probability of the successful breaking is directly proportional
 to the similarity of the source to the "normal" English text
-("normal" = written using a common English language).
-
-All source characters will be converted to the upper case before further processing.\
-Each source character which isn't English letter will be skipped.
+("normal" means "written using a common English language").
 
 ## Tech stack
 
@@ -44,14 +53,15 @@ Each source character which isn't English letter will be skipped.
 #### Required
 
 * `--encrypt`, `--decrypt`, `--break` - the name of an action to do
-* `--caesar`, `--vigenere`, `--affine`, `--gamma` - the name of the cipher to use
+* `--caesar`, `--vigenere`, `--affine`, `--gamma`, `--feistelNetwork` - the name of the cipher to use
 * `--in IN`, `--input IN` - an input file path
 * `--out OUT`, `--output OUT` - an output file path
 
 #### Optionally required for different ciphers
 
 * `--shift SHIFT` - the shift required for Caesar cipher encryption/decryption
-* `--key KEY` - the key required for Vigenere cipher encryption/decryption (must consist of English letters only)
+* `--key KEY` - the key required for Vigenere cipher encryption/decryption
+(must consist of English letters only)
 * `--b B` - `b` variable required for Affine cipher encryption/decryption
 
 #### Optional

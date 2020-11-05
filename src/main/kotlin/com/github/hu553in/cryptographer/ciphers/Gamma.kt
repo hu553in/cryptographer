@@ -14,7 +14,7 @@ object Gamma : Encryptor, Decrypter {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val startKey = ctx.startKey ?: throw NullCipherContextParamException()
         val rng = LinearCongruentGenerator(startKey)
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
@@ -28,7 +28,7 @@ object Gamma : Encryptor, Decrypter {
     override fun decrypt(source: String, ctx: CipherContext): String {
         val startKey = ctx.startKey ?: throw NullCipherContextParamException()
         val rng = LinearCongruentGenerator(startKey)
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {

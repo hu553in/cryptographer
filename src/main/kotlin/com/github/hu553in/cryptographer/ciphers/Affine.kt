@@ -13,7 +13,7 @@ import com.github.hu553in.cryptographer.utils.CipherContext
 object Affine : Encryptor, Decrypter {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val b = ctx.b ?: throw NullCipherContextParamException()
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
@@ -26,7 +26,7 @@ object Affine : Encryptor, Decrypter {
 
     override fun decrypt(source: String, ctx: CipherContext): String {
         val b = ctx.b ?: throw NullCipherContextParamException()
-        return source.map {
+        return source.toUpperCase().map {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
