@@ -5,12 +5,12 @@ import com.github.hu553in.cryptographer.roles.Breaker
 import com.github.hu553in.cryptographer.roles.Decrypter
 import com.github.hu553in.cryptographer.roles.Encryptor
 import com.github.hu553in.cryptographer.utils.ALPHABET_SIZE
+import com.github.hu553in.cryptographer.utils.ALPHABET_STANDARD_FREQUENCIES
 import com.github.hu553in.cryptographer.utils.A_CODE
 import com.github.hu553in.cryptographer.utils.A_CODE_Z_CODE_RANGE
 import com.github.hu553in.cryptographer.utils.CipherContext
-import com.github.hu553in.cryptographer.utils.ENGLISH_ALPHABET_STANDARD_FREQUENCIES
-import com.github.hu553in.cryptographer.utils.ENGLISH_INDEX_OF_COINCIDENCE
 import com.github.hu553in.cryptographer.utils.MAX_ESTIMATED_KEY_LENGTH
+import com.github.hu553in.cryptographer.utils.STANDARD_INDEX_OF_COINCIDENCE
 import com.github.hu553in.cryptographer.utils.Z_CODE
 import kotlin.math.abs
 
@@ -62,8 +62,9 @@ object Vigenere : Encryptor, Decrypter, Breaker {
                 group.count { it == letterCode.toChar() }.toDouble()
             }
             A_CODE_Z_CODE_RANGE.fold(0.0) { indexOfCoincidenceForGroup, letterCode ->
+                val currentFrequency = frequencies[letterCode - A_CODE]
                 indexOfCoincidenceForGroup +
-                        (frequencies[letterCode - A_CODE] * (frequencies[letterCode - A_CODE] - 1)) /
+                        (currentFrequency * (currentFrequency - 1)) /
                         (group.length * (group.length - 1))
             }
         }
@@ -76,7 +77,7 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         for (newKeyLength in 2..MAX_ESTIMATED_KEY_LENGTH) {
             val newIndexOfCoincidence = countIndexOfCoincidence(source, newKeyLength)
             if (newIndexOfCoincidence.isNaN()) break
-            val newDifference = abs(ENGLISH_INDEX_OF_COINCIDENCE - newIndexOfCoincidence)
+            val newDifference = abs(STANDARD_INDEX_OF_COINCIDENCE - newIndexOfCoincidence)
             if (newDifference < difference) {
                 difference = newDifference
                 keyLength = newKeyLength
@@ -85,10 +86,17 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         return keyLength
     }
 
-    private fun splitStringToGroupsOfNthElements(source: String, groupCount: Int): List<String> {
+    private fun splitStringToGroupsOfNthElements(
+        source: String,
+        groupCount: Int
+    ): List<String> {
         val sourceChunks = source.chunked(groupCount)
         return MutableList(groupCount) { mutableListOf<Char>() }.apply {
-            sourceChunks.forEach { chunk -> chunk.forEachIndexed { index, char -> this[index].add(char) } }
+            sourceChunks.forEach { chunk ->
+                chunk.forEachIndexed { index, char ->
+                    this[index].add(char)
+                }
+            }
         }.map { it.joinToString("") }
     }
 
@@ -96,12 +104,19 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         var correlation = 0.0
         var decryptedGroup = ""
         (0 until ALPHABET_SIZE).forEach { alphabetIndex ->
-            val newDecryptedGroupOfNthElements = Caesar.decrypt(group, CipherContext(shift = alphabetIndex))
+            val newDecryptedGroupOfNthElements = Caesar.decrypt(
+                group,
+                CipherContext(shift = alphabetIndex)
+            )
             val frequencies = A_CODE_Z_CODE_RANGE.map { letterCode ->
-                newDecryptedGroupOfNthElements.count { it == letterCode.toChar() }.toDouble()
+                newDecryptedGroupOfNthElements.count {
+                    it == letterCode.toChar()
+                }.toDouble()
             }
             val newCorrelation = A_CODE_Z_CODE_RANGE.fold(0.0) { reducer, element ->
-                val standardFrequency = ENGLISH_ALPHABET_STANDARD_FREQUENCIES.getValue(element.toChar())
+                val standardFrequency = ALPHABET_STANDARD_FREQUENCIES.getValue(
+                    element.toChar()
+                )
                 reducer + standardFrequency * frequencies[element - A_CODE]
             }
             if (newCorrelation > correlation) {
@@ -130,8 +145,15 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         return StringBuilder().apply {
             for (biggestDecryptedGroupElementIndex in decryptedGroupsOfNthElements[0].indices) {
                 for (decryptedGroupIndex in decryptedGroupsOfNthElements.indices) {
-                    if (biggestDecryptedGroupElementIndex < decryptedGroupsOfNthElements[decryptedGroupIndex].length) {
-                        append(decryptedGroupsOfNthElements[decryptedGroupIndex][biggestDecryptedGroupElementIndex])
+                    if (
+                        biggestDecryptedGroupElementIndex <
+                        decryptedGroupsOfNthElements[decryptedGroupIndex].length
+                    ) {
+                        append(
+                            decryptedGroupsOfNthElements
+                                    [decryptedGroupIndex]
+                                    [biggestDecryptedGroupElementIndex]
+                        )
                     }
                 }
             }

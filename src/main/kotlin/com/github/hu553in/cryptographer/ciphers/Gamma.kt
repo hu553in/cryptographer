@@ -18,7 +18,8 @@ object Gamma : Encryptor, Decrypter {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
-                val newCode = (it.toInt() - A_CODE + rng.next()) % ALPHABET_SIZE + A_CODE
+                val newCode = (it.toInt() - A_CODE + rng.next()) %
+                        ALPHABET_SIZE + A_CODE
                 newCode.toChar()
             }
         }.joinToString("")
@@ -36,7 +37,8 @@ object Gamma : Encryptor, Decrypter {
                 val newCode = if (alphabetPosition + ALPHABET_SIZE >= key) {
                     (alphabetPosition + ALPHABET_SIZE - key) % ALPHABET_SIZE + A_CODE
                 } else {
-                    ALPHABET_SIZE - abs(alphabetPosition - key + ALPHABET_SIZE) % ALPHABET_SIZE + A_CODE
+                    ALPHABET_SIZE - abs(alphabetPosition - key + ALPHABET_SIZE) %
+                            ALPHABET_SIZE + A_CODE
                 }
                 newCode.toChar()
             }

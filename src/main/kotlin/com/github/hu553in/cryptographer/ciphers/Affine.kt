@@ -17,7 +17,8 @@ object Affine : Encryptor, Decrypter {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
-                val newCode = (AFFINE_A * (it.toInt() - A_CODE) + b) % ALPHABET_SIZE + A_CODE
+                val newCode = (AFFINE_A * (it.toInt() - A_CODE) + b) %
+                        ALPHABET_SIZE + A_CODE
                 newCode.toChar()
             }
         }.joinToString("")
@@ -29,7 +30,8 @@ object Affine : Encryptor, Decrypter {
             if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
                 it
             } else {
-                val newCode = AFFINE_A_SWAP * ((it.toInt() - A_CODE) - b) % ALPHABET_SIZE + A_CODE
+                val newCode = AFFINE_A_SWAP * ((it.toInt() - A_CODE) - b) %
+                        ALPHABET_SIZE + A_CODE
                 newCode.toChar()
             }
         }.joinToString("")

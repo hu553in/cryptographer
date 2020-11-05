@@ -47,9 +47,16 @@ class CommandLineArgs(parser: ArgParser) {
         }
     val key by parser.storing(
         "--key",
-        help = "key required for Vigenere cipher encryption/decryption (must consist of English letters only)"
+        help = "key required for Vigenere cipher encryption/decryption " +
+                "(must consist of English letters only)"
     )
-    { toUpperCase() }
+    {
+        try {
+            toUpperCase()
+        } catch (e: Exception) {
+            throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
+        }
+    }
         .default<String?>(null)
         .addValidator {
             if (
