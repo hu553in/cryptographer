@@ -24,11 +24,10 @@ Their values are:
 * `b = 2`
 * `m = 40692`
 
-Feistel network's keys, block length, round key calculation algorithm
+Feistel network's keys and round key calculation algorithm
 are hardcoded in the current version of app.\
 Their values are:
 * keys: `5`, `2`, `7`, `6`, `1`, `8`, `3`, `9`, `4`, `6`, `2`, `3`, `8`, `5`, `1`, `4`
-* block length: `4`
 * round key calculation algorithm: `key * 7 / 2`
 
 Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
