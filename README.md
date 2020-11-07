@@ -13,10 +13,22 @@ This project is an encryption/decryption app that can process the source using f
 Each source character which is not English letter will be skipped.
 **These two statements are true for everything excluding Feistel network cipher.**
 
+Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
+
+**Note:** the probability of the successful breaking is directly proportional
+to the similarity of the source to the "normal" English text
+("normal" means "written using a common English language").
+
+## Limitations
+
+### Affine cipher
+
 Affine cipher's `a` variable is hardcoded in the current version of app.\
 It's value is:
 * `3` for encryption
 * `9` for decryption
+
+### Gamma cipher
 
 Gamma cipher's `a`, `b`, `m` variables are hardcoded in the current version of app.\
 Their values are:
@@ -24,20 +36,19 @@ Their values are:
 * `b = 2`
 * `m = 40692`
 
+### Feistel network cipher
+
 Feistel network's keys and round key calculation algorithm
 are hardcoded in the current version of app.\
 Their values are:
 * keys: `5`, `2`, `7`, `6`, `1`, `8`, `3`, `9`, `4`, `6`, `2`, `3`, `8`, `5`, `1`, `4`
-* round key calculation algorithm: `key * 7 / 2`
+* round key calculation algorithm: `key * 7 / 2` (an integer division)
 
 The program works with texts which are encoded using UTF-8,
 so Feistel network's block size equals 4.
 
-Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
-
-**Note:** the probability of the successful breaking is directly proportional
-to the similarity of the source to the "normal" English text
-("normal" means "written using a common English language").
+**Note:** The program _**theoretically**_ can fail while processing a text which contains
+some UTF-8 characters. At the moment there's no workaround or fix for this issue.
 
 ## Tech stack
 
@@ -46,7 +57,7 @@ to the similarity of the source to the "normal" English text
 
 ## How to use
 
-1. Install `OpenJDK` (≥ 8), `GNU Make`
+1. Install OpenJDK (≥ 8), GNU Make
 2. Run `make`
 3. Run `java -jar ./build/cryptographer.jar` with `--help` or some another CLI args
 
