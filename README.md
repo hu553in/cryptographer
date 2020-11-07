@@ -1,5 +1,20 @@
 # cryptographer
 
+## Table of contents
+
+* [Description](#description)
+* [Limitations](#limitations)
+  * [Affine cipher](#affine-cipher)
+  * [Gamma cipher](#gamma-cipher)
+  * [Feistel network cipher](#feistel-network-cipher)
+* [Tech stack](#tech-stack)
+* [How to use](#how-to-use)
+  * [CLI args](#cli-args)
+    * [Required](#required)
+    * [Optionally required for different ciphers](#optionally-required-for-different-ciphers)
+    * [Optional](#optional)
+  * [Example](#example)
+
 ## Description
 
 This project is an encryption/decryption app that can process the source using following ciphers:
