@@ -30,6 +30,9 @@ Their values are:
 * keys: `5`, `2`, `7`, `6`, `1`, `8`, `3`, `9`, `4`, `6`, `2`, `3`, `8`, `5`, `1`, `4`
 * round key calculation algorithm: `key * 7 / 2`
 
+The program works with texts which are encoded using UTF-8,
+so Feistel network's block size equals 4.
+
 Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
 
 **Note:** the probability of the successful breaking is directly proportional
