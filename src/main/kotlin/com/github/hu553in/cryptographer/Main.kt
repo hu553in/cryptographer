@@ -30,7 +30,7 @@ fun main(args: Array<String>) = mainBody {
     ArgParser(args).parseInto(::CommandLineArgs).run {
         try {
             val ctx = CipherContext(startKey, b, shift, key)
-            val source = File(input).readText().trim()
+            val source = File(input).readText()
             val result: String = try {
                 when (action) {
                     ENCRYPT -> {
@@ -66,8 +66,11 @@ fun main(args: Array<String>) = mainBody {
                 error(INVALID_CLI_ARGS_ERROR_MSG)
             }
             File(output).writeText(result)
+            val printableSource = source.replace(Regex("(\\p{C})"), "?");
+            val printableResult = result.replace(Regex("(\\p{C})"), "?");
             logger.info(
-                "\n\n===== SOURCE =====\n\n$source\n\n===== RESULT =====\n\n$result"
+                "\n\n===== SOURCE =====\n\n$printableSource\n\n" +
+                    "===== RESULT =====\n\n$printableResult"
             )
         } catch (e: Exception) {
             logger.error("${e.javaClass.canonicalName} - ${e.message}")
