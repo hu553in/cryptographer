@@ -38,7 +38,7 @@ to the similarity of the source to the "normal" English text
 
 ### Affine cipher
 
-Affine cipher's `a` variable is hardcoded in the current version of app.\
+An Affine cipher's `a` variable is hardcoded in the current version of app.\
 It's value is:
 * `3` for encryption
 * `9` for decryption
@@ -53,11 +53,11 @@ Their values are:
 
 ### Feistel network cipher
 
-Feistel network's keys and round key calculation algorithm
+Feistel network's keys and the round key calculation algorithm
 are hardcoded in the current version of app.\
 Their values are:
 * keys: `5`, `2`, `7`, `6`, `1`, `8`, `3`, `9`, `4`, `6`, `2`, `3`, `8`, `5`, `1`, `4`
-* round key calculation algorithm: `key * 7 / 2` (an integer division)
+* the round key calculation algorithm: `key * 7 / 2` (an integer division)
 
 The program works with texts which are encoded using UTF-8,
 so Feistel network's block size equals 4.
@@ -87,14 +87,14 @@ some UTF-8 characters. At the moment there's no workaround or fix for this issue
 
 #### Optionally required for different ciphers
 
-* `--shift SHIFT` - the shift required for Caesar cipher encryption/decryption
-* `--key KEY` - the key required for Vigenere cipher encryption/decryption
+* `--shift SHIFT` - the shift required for the Caesar cipher encryption/decryption
+* `--key KEY` - the key required for the Vigenere cipher encryption/decryption
 (must consist of English letters only)
-* `--b B` - `b` variable required for Affine cipher encryption/decryption
+* `--b B` - `b` variable required for the Affine cipher encryption/decryption
 
 #### Optional
 
-* `--startKey START_KEY` - the start key for gamma cipher encryption/decryption (defaults to `1`)
+* `--startKey START_KEY` - the start key for the gamma cipher encryption/decryption (defaults to `1`)
 * `-h`, `--help` - show this help message and exit
 
 ### Example
