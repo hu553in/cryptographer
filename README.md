@@ -70,7 +70,7 @@ some UTF-8 characters. At the moment there's no workaround or fix for this issue
 * Kotlin
 * Gradle
 
-## How to use
+## How to run
 
 1. Install OpenJDK (≥ 8), GNU Make
 2. Run `make`
