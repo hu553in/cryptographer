@@ -31,7 +31,7 @@ Each source character which is not English letter will be skipped.\
 
 Also, this app can try to break Vigenere cipher using the frequency cryptanalysis.
 
-**Note:** the probability of the successful breaking is directly proportional to the similarity of the source to the 
+**Note:** the probability of the successful breaking is directly proportional to the similarity of the source to the
 "normal" English text ("normal" means "written using a common English language").
 
 ## Limitations
