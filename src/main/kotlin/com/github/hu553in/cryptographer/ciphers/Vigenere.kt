@@ -18,15 +18,15 @@ object Vigenere : Encryptor, Decrypter, Breaker {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
                 if (!keyIterator.hasNext()) {
                     keyIterator = key.iterator()
                 }
-                val shift = keyIterator.nextChar().toInt() - A_CODE
-                var newCode = it.toInt() + shift
+                val shift = keyIterator.nextChar().code - A_CODE
+                var newCode = it.code + shift
                 if (newCode > Z_CODE) {
                     newCode -= ALPHABET_SIZE
                 }
@@ -38,15 +38,15 @@ object Vigenere : Encryptor, Decrypter, Breaker {
     override fun decrypt(source: String, ctx: CipherContext): String {
         val key = ctx.key ?: throw NullCipherContextParamException()
         var keyIterator = key.iterator()
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
                 if (!keyIterator.hasNext()) {
                     keyIterator = key.iterator()
                 }
-                val shift = keyIterator.nextChar().toInt() - A_CODE
-                var newCode = it.toInt() - shift
+                val shift = keyIterator.nextChar().code - A_CODE
+                var newCode = it.code - shift
                 if (newCode < A_CODE) {
                     newCode += ALPHABET_SIZE
                 }
@@ -126,7 +126,7 @@ object Vigenere : Encryptor, Decrypter, Breaker {
         @Suppress("UNUSED_PARAMETER")
         ctx: CipherContext
     ): String {
-        val upperCaseSource = source.toUpperCase()
+        val upperCaseSource = source.uppercase()
         val nonEnglishAlphabetSymbols = Regex("[^A-Z]")
             .findAll(upperCaseSource)
             .associate { it.range.first to it.value }

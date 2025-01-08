@@ -4,10 +4,10 @@ all: build postBuild
 
 .PHONY: build
 build:
-	${GRADLEW_EXEC} clean jar
+	${GRADLEW_EXEC} clean shadowJar
 
 .PHONY: postBuild
 postBuild:
-	mv ./build/libs/cryptographer.jar ./
+	mv ./build/libs/cryptographer-all.jar ./cryptographer.jar
 	rm -rf ./build/*
 	mv ./cryptographer.jar ./build/

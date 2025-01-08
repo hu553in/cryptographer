@@ -13,11 +13,11 @@ import com.github.hu553in.cryptographer.utils.CipherContext
 object Affine : Encryptor, Decrypter {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val b = ctx.b ?: throw NullCipherContextParamException()
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
-                val newCode = (AFFINE_A * (it.toInt() - A_CODE) + b) %
+                val newCode = (AFFINE_A * (it.code - A_CODE) + b) %
                         ALPHABET_SIZE + A_CODE
                 newCode.toChar()
             }
@@ -26,12 +26,12 @@ object Affine : Encryptor, Decrypter {
 
     override fun decrypt(source: String, ctx: CipherContext): String {
         val b = ctx.b ?: throw NullCipherContextParamException()
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
-                val newCode = AFFINE_A_SWAP * ((it.toInt() - A_CODE) - b) %
-                        ALPHABET_SIZE + A_CODE
+                val newCode = (AFFINE_A_SWAP * ((it.code - A_CODE - b + ALPHABET_SIZE) %
+                        ALPHABET_SIZE) % ALPHABET_SIZE) + A_CODE
                 newCode.toChar()
             }
         }.joinToString("")

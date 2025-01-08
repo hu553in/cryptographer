@@ -53,7 +53,7 @@ class CommandLineArgs(parser: ArgParser) {
     )
     {
         try {
-            toUpperCase()
+            uppercase()
         } catch (e: Exception) {
             throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)
         }
@@ -64,7 +64,7 @@ class CommandLineArgs(parser: ArgParser) {
                 cipher == VIGENERE &&
                 (action == ENCRYPT || action == DECRYPT) &&
                 (value == null || value!!.isEmpty() || value!!.any {
-                    !A_CODE_Z_CODE_RANGE.contains(it.toInt())
+                    !A_CODE_Z_CODE_RANGE.contains(it.code)
                 })
             ) {
                 throw SystemExitException(INVALID_CLI_ARGS_ERROR_MSG, 1)

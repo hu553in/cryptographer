@@ -13,8 +13,8 @@ const val BREAK = "break"
 const val STANDARD_INDEX_OF_COINCIDENCE = 0.0667
 const val MAX_ESTIMATED_KEY_LENGTH = 25
 
-const val A_CODE = 'A'.toInt()
-const val Z_CODE = 'Z'.toInt()
+const val A_CODE = 'A'.code
+const val Z_CODE = 'Z'.code
 
 const val ALPHABET_SIZE = Z_CODE - A_CODE + 1
 val A_CODE_Z_CODE_RANGE = A_CODE..Z_CODE

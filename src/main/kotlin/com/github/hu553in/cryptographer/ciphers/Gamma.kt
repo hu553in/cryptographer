@@ -14,11 +14,11 @@ object Gamma : Encryptor, Decrypter {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val startKey = ctx.startKey ?: throw NullCipherContextParamException()
         val rng = LinearCongruentGenerator(startKey)
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
-                val newCode = (it.toInt() - A_CODE + rng.next()) %
+                val newCode = (it.code - A_CODE + rng.next()) %
                         ALPHABET_SIZE + A_CODE
                 newCode.toChar()
             }
@@ -28,12 +28,12 @@ object Gamma : Encryptor, Decrypter {
     override fun decrypt(source: String, ctx: CipherContext): String {
         val startKey = ctx.startKey ?: throw NullCipherContextParamException()
         val rng = LinearCongruentGenerator(startKey)
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
                 val key = rng.next()
-                val alphabetPosition = it.toInt() - A_CODE
+                val alphabetPosition = it.code - A_CODE
                 val newCode = if (alphabetPosition + ALPHABET_SIZE >= key) {
                     (alphabetPosition + ALPHABET_SIZE - key) % ALPHABET_SIZE + A_CODE
                 } else {

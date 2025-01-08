@@ -13,11 +13,11 @@ object Caesar : Encryptor, Decrypter {
     override fun encrypt(source: String, ctx: CipherContext): String {
         val shift = ctx.shift ?: throw NullCipherContextParamException()
         val realShift = shift % (ALPHABET_SIZE)
-        return source.toUpperCase().map {
-            if (!(A_CODE_Z_CODE_RANGE).contains(it.toInt())) {
+        return source.uppercase().map {
+            if (!(A_CODE_Z_CODE_RANGE).contains(it.code)) {
                 it
             } else {
-                var newCode = it.toInt() + realShift
+                var newCode = it.code + realShift
                 if (newCode > Z_CODE) {
                     newCode -= ALPHABET_SIZE
                 } else if (newCode < A_CODE) {
