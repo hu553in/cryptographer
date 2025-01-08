@@ -73,7 +73,7 @@ At the moment there's no workaround or fix for this issue.
 
 ## How to run
 
-1. Install OpenJDK (≥ 8), GNU Make
+1. Install OpenJDK (≥ 17), GNU Make
 2. Run `make`
 3. Run `java -jar ./build/cryptographer.jar` with `--help` or some another CLI args
 
