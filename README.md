@@ -3,6 +3,7 @@
 ## Table of contents
 
 * [Description](#description)
+* [Roadmap](#roadmap)
 * [Limitations](#limitations)
     * [Affine cipher](#affine-cipher)
     * [Gamma cipher](#gamma-cipher)
@@ -33,6 +34,10 @@ Also, this app can try to break Vigenere cipher using the frequency cryptanalysi
 
 **Note:** the probability of the successful breaking is directly proportional to the similarity of the source to the
 "normal" English text ("normal" means "written using a common English language").
+
+## Roadmap
+
+- [ ] add tests for all ciphers
 
 ## Limitations
 
